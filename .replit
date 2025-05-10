@@ -1,0 +1,32 @@
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "SSH Tunnel App"
+
+[[workflows.workflow]]
+name = "SSH Tunnel App"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install ssh2 && node app.js"
+waitForPort = 3000
+
+[deployment]
+run = ["sh", "-c", "npm install ssh2 && node app.js"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
